@@ -3,6 +3,7 @@
 # DESCRIPTION: Amazon MWAA Local Dev Environment
 # BUILD: docker build --rm -t amazon/mwaa-local .
 
+ARG PLATFORM=linux/amd64
 FROM amazonlinux:2
 LABEL maintainer="amazon"
 

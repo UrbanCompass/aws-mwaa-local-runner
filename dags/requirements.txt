@@ -1,1 +1,1 @@
-/usr/local/airflow/plugins/airflow-0.0.0-py3-none-any.whl
+/usr/local/airflow/plugins/agent_cache_refresh_airflow-0.0.0-py3-none-any.whl

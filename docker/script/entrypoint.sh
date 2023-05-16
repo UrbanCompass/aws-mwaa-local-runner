@@ -79,6 +79,24 @@ case "$1" in
       airflow scheduler &
       sleep 2
     fi
+
+    airflow connections add 'agent_insights_db' \
+        --conn-type 'postgres' \
+        --conn-login 'agent_insights_reader' \
+        --conn-password 'ioxbTFrqWtZCN8BjE1AG' \
+        --conn-host 'host.docker.internal' \
+        --conn-port '5432' \
+        --conn-schema 'agent_insights' \
+
+    airflow connections add 'research_redshift_db' \
+        --conn-type 'postgres' \
+        --conn-login 'compass' \
+        --conn-password 'tkMiHBnvqtNMqkKW9o8S' \
+        --conn-host 'host.docker.internal' \
+        --conn-port '5439' \
+        --conn-schema 'research' \
+
+    airflow users create -r Admin -u admin -e admin@example.com -f admin -l user -p "test"
     exec airflow webserver
     ;;
   resetdb)

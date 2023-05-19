@@ -4,7 +4,7 @@
 # BUILD: docker build --rm -t amazon/mwaa-local .
 
 ARG PLATFORM=linux/amd64
-FROM --platform=${PLATFORM} public.ecr.aws/amazonlinux/amazonlinux
+FROM --platform=${PLATFORM} amazonlinux:2.0.20230307.0
 LABEL maintainer="amazon"
 
 # Airflow

@@ -28,9 +28,10 @@ services:
                 max-size: 10m
                 max-file: "3"
         volumes:
-            - ${PWD}/dags:/usr/local/airflow/dags
-            - ${PWD}/plugins:/usr/local/airflow/plugins
+            - "${PWD}/dags:/usr/local/airflow/dags"
+            - "${PWD}/plugins:/usr/local/airflow/plugins"
             - ~/.aws:/usr/local/airflow/.aws # Include AWS config to interact with AWS APIs
+            - "${PWD}/startup_script:/usr/local/airflow/startup"
         ports:
             - "8080:8080"
         command: local-runner

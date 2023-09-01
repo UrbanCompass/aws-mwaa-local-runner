@@ -3,9 +3,21 @@
 set -e
 
 # Upgrade pip version to latest
+yum update -y
+yum install -y shadow-utils
+adduser -s /bin/bash -d "${AIRFLOW_USER_HOME}" airflow
+yum install -y sudo
+
+echo 'airflow ALL=(ALL)NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo
+
+# install basic python environment and other required dependencies
+yum install -y python37 gcc gcc-g++ python3-devel python3-wheel
+
+# Upgrade pip
 python3 -m pip install --upgrade 'pip<23'
 
 # Install wheel to avoid legacy setup.py install
+echo "Installing minimal Airflow packages"
 pip3 install wheel
 
 # On RHL and Centos based linux, openssl needs to be set as Python Curl SSL library
@@ -22,9 +34,6 @@ pip3 install $PIP_OPTION --constraint /constraints.txt apache-airflow[crypto,cel
 
 # install additional python dependencies
 if [ -n "${PYTHON_DEPS}" ]; then pip3 install $PIP_OPTION "${PYTHON_DEPS}"; fi
-
-# install adduser and add the airflow user
-adduser -s /bin/bash -d "${AIRFLOW_USER_HOME}" airflow
 
 # Install default providers
 pip3 install --constraint /constraints.txt apache-airflow-providers-amazon

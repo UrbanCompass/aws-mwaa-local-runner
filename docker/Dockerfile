@@ -4,7 +4,7 @@
 # BUILD: docker build --rm -t amazon/mwaa-local .
 
 ARG PLATFORM=linux/amd64
-FROM amazonlinux:2
+FROM --platform=${PLATFORM} amazonlinux:2.0.20230307.0
 LABEL maintainer="amazon"
 
 # Airflow
@@ -18,11 +18,15 @@ ENV AIRFLOW_HOME=${AIRFLOW_USER_HOME}
 
 COPY script/bootstrap.sh /bootstrap.sh
 COPY script/systemlibs.sh /systemlibs.sh
+COPY script/run-startup.sh /run-startup.sh
+COPY script/shell-launch-script.sh /shell-launch-script.sh
 COPY config/constraints.txt /constraints.txt
 COPY config/requirements.txt /requirements.txt
 
 RUN chmod u+x /systemlibs.sh && /systemlibs.sh
 RUN chmod u+x /bootstrap.sh && /bootstrap.sh
+RUN chmod u+x /run-startup.sh
+RUN chmod u+x /shell-launch-script.sh
 
 # Post bootstrap to avoid expensive docker rebuilds
 COPY script/entrypoint.sh /entrypoint.sh

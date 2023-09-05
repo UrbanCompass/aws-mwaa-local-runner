@@ -41,6 +41,21 @@ wait_for_port() {
   done
 }
 
+execute_startup_script() {
+  # Execute customer provided shell script
+  if [[ -e "$AIRFLOW_HOME/startup/startup.sh" ]]
+   then
+     bash /shell-launch-script.sh
+     source stored_env
+     export AIRFLOW_HOME="/usr/local/airflow"
+     export AIRFLOW__CORE__EXECUTOR="SequentialExecutor"
+     export AIRFLOW__CORE__LOAD_EXAMPLES="False"
+     cd "$AIRFLOW_HOME"
+  else
+    echo "No startup script found, skipping execution."
+  fi
+}
+
 # Other executors than SequentialExecutor drive the need for an SQL database, here PostgreSQL is used
 if [ "$AIRFLOW__CORE__EXECUTOR" != "SequentialExecutor" ]; then
   # Check if the user has provided explicit Airflow configuration concerning the database
@@ -69,6 +84,7 @@ fi
 case "$1" in
   local-runner)
     install_requirements
+    execute_startup_script
     # Forward ports for App Domain. 192.168.5.2 is the host system IP. This should be host.lima.internal, but that DNS
     # entry is currently broken. The IP should be static however.
     socat TCP4-LISTEN:31337,fork,reuseaddr TCP4:192.168.5.2:31337 &
@@ -88,6 +104,9 @@ case "$1" in
     ;;
   test-requirements)
     install_requirements
+    ;;
+  test-startup-script)
+    execute_startup_script
     ;;
   *)
     # The command is something like bash, not an airflow subcommand. Just run it in the right environment.

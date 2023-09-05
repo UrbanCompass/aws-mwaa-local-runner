@@ -3,9 +3,21 @@
 set -e
 
 # Upgrade pip version to latest
-python3 -m pip install --upgrade pip
+yum update -y
+yum install -y shadow-utils
+adduser -s /bin/bash -d "${AIRFLOW_USER_HOME}" airflow
+yum install -y sudo
+
+echo 'airflow ALL=(ALL)NOPASSWD:ALL' | sudo EDITOR='tee -a' visudo
+
+# install basic python environment and other required dependencies
+yum install -y python37 gcc gcc-g++ python3-devel python3-wheel
+
+# Upgrade pip
+python3 -m pip install --upgrade 'pip<23'
 
 # Install wheel to avoid legacy setup.py install
+echo "Installing minimal Airflow packages"
 pip3 install wheel
 
 # On RHL and Centos based linux, openssl needs to be set as Python Curl SSL library
@@ -23,23 +35,13 @@ pip3 install $PIP_OPTION --constraint /constraints.txt apache-airflow[crypto,cel
 # install additional python dependencies
 if [ -n "${PYTHON_DEPS}" ]; then pip3 install $PIP_OPTION "${PYTHON_DEPS}"; fi
 
-# install adduser and add the airflow user
-adduser -s /bin/bash -d "${AIRFLOW_USER_HOME}" airflow
-
-# install watchtower for Cloudwatch logging
-pip3 install $PIP_OPTION watchtower==1.0.1
-
-pip3 install $PIP_OPTION apache-airflow-providers-tableau==1.0.0
-pip3 install $PIP_OPTION apache-airflow-providers-databricks==1.0.1
-pip3 install $PIP_OPTION apache-airflow-providers-ssh==1.3.0
-pip3 install $PIP_OPTION apache-airflow-providers-postgres==1.0.2
-pip3 install $PIP_OPTION apache-airflow-providers-docker==1.2.0
-pip3 install $PIP_OPTION apache-airflow-providers-oracle==1.1.0
-pip3 install $PIP_OPTION apache-airflow-providers-presto==1.0.2
-pip3 install $PIP_OPTION apache-airflow-providers-sftp==1.2.0
-
 # Install default providers
 pip3 install --constraint /constraints.txt apache-airflow-providers-amazon
+
+# install watchtower for Cloudwatch logging
+# This has to come after installing apache-airflow-providers-amazon to avoid the
+# latter overwriting the version with a previous version.
+pip3 install $PIP_OPTION watchtower==2.0.1
 
 # Use symbolic link to ensure Airflow 2.0's backport packages are in the same namespace as Airflow itself
 # see https://airflow.apache.org/docs/apache-airflow/stable/backport-providers.html#troubleshooting-installing-backport-packages

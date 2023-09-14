@@ -1,4 +1,6 @@
---constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.3/constraints-3.11.txt"
-
+# upstream: this is how you'd use the standard constraints file
+# --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.10.3/constraints-3.11.txt"
+--constraint "https://compass-build-support.s3.amazonaws.com/airflow/geospatial_experimental/constraints.txt"
+/usr/local/airflow/plugins/airflow-0.0.0-py3-none-any.whl
 apache-airflow-providers-snowflake==5.8.0
 apache-airflow-providers-mysql==5.7.3

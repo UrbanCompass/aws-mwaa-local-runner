@@ -1,4 +1,4 @@
---constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.6.3/constraints-3.10.txt"
-
+--constraint "https://compass-build-support.s3.amazonaws.com/airflow/geospatial_experimental/constraints.txt"
+/usr/local/airflow/plugins/airflow-0.0.0-py3-none-any.whl
 apache-airflow-providers-snowflake==4.2.0
 apache-airflow-providers-mysql==5.1.1

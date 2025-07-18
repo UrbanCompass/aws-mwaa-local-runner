@@ -1,4 +1,8 @@
---constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.6.3/constraints-3.10.txt"
-
-apache-airflow-providers-snowflake==4.2.0
-apache-airflow-providers-mysql==5.1.1
+--constraint "https://compass-build-support.s3.amazonaws.com/airflow/afc/constraints.txt"
+# Get username/password from MWAA environment page, for example:
+#   https://283766562412-5wrgwynq.us-east-1.console.aws.amazon.com/mwaa/home?region=us-east-1#environments/afc-mwaa-gamma-environment-263
+--index-url https://<ARTFIFACTORY_USER>:<ARTFIFACTORY_PASSWORD>@artifacts.compass-tech.net/repository/pypi/simple
+/usr/local/airflow/plugins/afc_airflow-0.0.0-py3-none-any.whl
+apache-airflow-providers-databricks==4.3.0
+apache-airflow-providers-ssh==3.7.1
+apache-airflow-providers-sftp==4.3.1

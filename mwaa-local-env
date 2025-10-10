@@ -94,10 +94,11 @@ build-image)
    build_image
    ;;
 reset-db)
-   docker compose -p $DOCKER_COMPOSE_PROJECT_NAME -f ./docker/docker-compose-resetdb.yml up --abort-on-container-exit
+   # (djb) my mac seems to have docker-compose instead of `docker compose`. ymmv.
+   docker-compose -p $DOCKER_COMPOSE_PROJECT_NAME -f ./docker/docker-compose-resetdb.yml up --abort-on-container-exit
    ;;
 start)
-   docker compose -p $DOCKER_COMPOSE_PROJECT_NAME -f ./docker/docker-compose-local.yml up
+   docker-compose -p $DOCKER_COMPOSE_PROJECT_NAME -f ./docker/docker-compose-local.yml up
    ;;
 help)
    display_help
